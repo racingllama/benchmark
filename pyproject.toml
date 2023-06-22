@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "rlb"
+version = "0.1.0"
+description = "Racing Llama Benchmark is a benchmark tool for comparing llama.cpp performance against different versions and hardware."
+authors = ["Soleblaze <soleblaze@skyshadows.net>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/racingllama/benchmark"
+repository = "http://github.com/racingllama/benchmark"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+llama-cpp-python = "^0.1.65"
+matplotlib = "^3.7.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+pytest = "^7.3.2"
+mkdocs = "^1.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
