@@ -100,3 +100,12 @@ RAM: {sysinfo._ram}
         )
     else:
         return "Format Not Supported"
+
+
+def threads():
+    """Return suggested number of cpu threads to use."""
+    sysinfo = SystemInfo()
+    if sysinfo.os() == "MacOS":
+        return int(sysinfo._cpu_cores.split(":")[1])
+    else:
+        return 4
