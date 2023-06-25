@@ -54,7 +54,7 @@ class SystemInfo:
     def gpu(self):
         """Return GPU info."""
         if self.os() == "MacOS":
-            return f"{self._gpu} ({self._gpu_cores} cores)"
+            return f"{self._gpu} - {self._gpu_cores} cores"
         else:
             return "Unknown"
 
