@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Racing Llama Benchmark - a benchmarking application for llama.cpp."""
+"""Racing Llama Benchmark Alpha - a benchmarking application for llama.cpp."""
 
 import argparse
 import llama_bench
