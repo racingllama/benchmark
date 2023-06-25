@@ -46,10 +46,7 @@ class SystemInfo:
 
     def arch(self):
         """Return system architecture."""
-        if self._system.machine == "arm64" and self.os() == "MacOS":
-            return "Apple Silicon"
-        else:
-            return self._system.machine
+        return self._system.machine
 
     def gpu(self):
         """Return GPU info."""
