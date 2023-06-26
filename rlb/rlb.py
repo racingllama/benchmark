@@ -4,7 +4,8 @@
 import argparse
 import llama_bench
 import sysinfo
-from output import print_results
+import output
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -28,16 +29,50 @@ parser.add_argument(
 )
 
 group = parser.add_mutually_exclusive_group(required=True)
-group.add_argument("-m", "--model", type=str)
-group.add_argument("-d", "--directory", type=str)
+group.add_argument("-m", "--model", type=str, help="Model to use for benchmarking.")
+group.add_argument("-d", "--directory", type=str, help="Directory of models to use.")
 
 
 if __name__ == "__main__":
-    llm = llama_bench.Benchmark(
-        model=parser.parse_args().model,
-        threads=parser.parse_args().threads,
-        seed=parser.parse_args().seed,
-        gpu=parser.parse_args().gpu,
-    )
-    results = llm.multiple_runs(parser.parse_args().prompt, parser.parse_args().runs)
-    print_results(results, parser)
+    if parser.parse_args().model:
+        llm = llama_bench.Benchmark(
+            model=parser.parse_args().model,
+            threads=parser.parse_args().threads,
+            seed=parser.parse_args().seed,
+            gpu=parser.parse_args().gpu,
+        )
+        results = llm.multiple_runs(
+            parser.parse_args().prompt, parser.parse_args().runs
+        )
+        output.print_results(results, parser, type="model")
+
+    elif parser.parse_args().directory:
+        results = []
+        models = llama_bench.parse_directory(parser.parse_args().directory)
+        for model in models:
+            print(
+                f"Running benchmark for {model['name']} ({model['quant']} {model['parameters']})"
+            )
+            llm = llama_bench.Benchmark(
+                model=model["path"],
+                threads=parser.parse_args().threads,
+                seed=parser.parse_args().seed,
+                gpu=parser.parse_args().gpu,
+            )
+            result = llm.multiple_runs(
+                parser.parse_args().prompt, parser.parse_args().runs
+            )
+
+            del llm
+
+            data = llama_bench.calculate_stats(result)
+
+            results.append(
+                {
+                    "name": model["name"],
+                    "quant": model["quant"],
+                    "parameters": model["parameters"],
+                    "data": data,
+                }
+            )
+        output.print_results(results, parser, type="directory")

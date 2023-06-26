@@ -1,6 +1,7 @@
 """llama.cpp benchmark."""
 
-from io import StringIO
+import gc
+import time
 from llama_cpp import Llama
 from wurlitzer import pipes
 
@@ -22,6 +23,14 @@ class Benchmark:
         self._llama = Llama(
             model_path=model, n_gpu_layers=ngl, seed=seed, n_threads=threads
         )
+
+    def __del__(self):
+        """Delete model."""
+        # This does successfully free the memory. However, llama.cpp does not
+        # notice and still reports the memory as used, causing it to complain
+        # about memory usage when running benchmarks against multiple models.
+        self._llama.__del__()
+        gc.collect()
 
     def run(self, prompt):
         """Run benchmark.
@@ -51,6 +60,7 @@ class Benchmark:
         results = {}
         for run in range(runs):
             results[run] = self.run(prompt)
+
         return results
 
     def parse_timings(self, input):
