@@ -1,7 +1,6 @@
 """llama.cpp benchmark."""
 
 import gc
-import time
 from llama_cpp import Llama
 from wurlitzer import pipes
 
@@ -38,14 +37,17 @@ class Benchmark:
         Returns:
             str: Benchmark results.
         """
+        output = {}
         with pipes() as (out, err):
             self._llama.reset()
-            self._llama(prompt, max_tokens=1024)
+            output["output"] = self._llama(prompt, max_tokens=1024)
 
         stats = err.read()
 
         print(stats)
-        return self.parse_timings(stats)
+
+        output.update(self.parse_timings(stats))
+        return output
 
     def multiple_runs(self, prompt, runs):
         """Run benchmark multiple times.
