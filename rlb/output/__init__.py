@@ -1,6 +1,7 @@
 """Output benchmark results."""
 
 import llama_bench
+import pkg_resources
 import os
 import sysinfo
 from tabulate import tabulate
@@ -28,6 +29,7 @@ def print_results(results, parser, type="model"):
         denorm = denormalize_results(results)
         print(
             f"""Runs: {parser.parse_args().runs}
+llama-cpp-python version: {pkg_resources.get_distribution("llama-cpp-python").version}
 CPU Threads: {parser.parse_args().threads}
 GPU Acceleration: {parser.parse_args().gpu}
 Seed: {parser.parse_args().seed}
@@ -43,6 +45,7 @@ Prompt Tokens per second:
     else:
         print(
             f"""Runs: {parser.parse_args().runs}
+llama-cpp-python version: {pkg_resources.get_distribution("llama-cpp-python").version}
 CPU Threads: {parser.parse_args().threads}
 GPU Acceleration: {parser.parse_args().gpu}
 Model: {os.path.basename(parser.parse_args().model)}

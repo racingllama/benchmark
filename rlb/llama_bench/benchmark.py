@@ -38,7 +38,7 @@ class Benchmark:
             str: Benchmark results.
         """
         output = {}
-        with pipes() as (out, err):
+        with pipes() as (_, err):
             self._llama.reset()
             output["output"] = self._llama(prompt, max_tokens=1024)
 
