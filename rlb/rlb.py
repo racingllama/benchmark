@@ -3,40 +3,33 @@
 
 import argparse
 import llama_bench
-import os
 import sysinfo
+from output import print_results
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-g", "--gpu", action="store_true", default=False)
-parser.add_argument("-m", "--model", type=str, required=True)
-parser.add_argument("-p", "--prompt", type=str, default="test")
-parser.add_argument("-r", "--runs", type=int, default=3)
-parser.add_argument("-s", "--seed", type=int, default=42)
-parser.add_argument("-t", "--threads", type=int, default=sysinfo.threads())
+parser.add_argument(
+    "-g", "--gpu", action="store_true", default=False, help="Enable GPU acceleration."
+)
+parser.add_argument(
+    "-p", "--prompt", type=str, default="test", help="Prompt to use for benchmarking."
+)
+parser.add_argument(
+    "-r", "--runs", type=int, default=5, help="Number of runs to perform."
+)
+parser.add_argument(
+    "-s", "--seed", type=int, default=42, help="Seed to use for benchmarking."
+)
+parser.add_argument(
+    "-t",
+    "--threads",
+    type=int,
+    default=sysinfo.threads(),
+    help="Number of threads to use for benchmarking.",
+)
 
-
-def print_results(results):
-    """Print benchmark results.
-
-    Args:
-        results (dict): Benchmark results.
-    """
-    print(
-        f"""
-Racing Llama Benchmark
-
-System Information:
-{sysinfo.basic()}
-Runs: {parser.parse_args().runs}
-CPU Threads: {parser.parse_args().threads}
-GPU Acceleration: {parser.parse_args().gpu}
-Model: {os.path.basename(parser.parse_args().model)}
-Seed: {parser.parse_args().seed}
-Prompt: {parser.parse_args().prompt}
-"""
-    )
-    print(llama_bench.summary(results))
-    # print(f"Debug: {results}")
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument("-m", "--model", type=str)
+group.add_argument("-d", "--directory", type=str)
 
 
 if __name__ == "__main__":
@@ -47,4 +40,4 @@ if __name__ == "__main__":
         gpu=parser.parse_args().gpu,
     )
     results = llm.multiple_runs(parser.parse_args().prompt, parser.parse_args().runs)
-    print_results(results)
+    print_results(results, parser)
