@@ -1,7 +1,7 @@
 """llama.cpp benchmark."""
 
 import gc
-import json
+import re
 from llama_cpp import Llama
 from wurlitzer import pipes
 from .prompts import prompts
@@ -84,7 +84,8 @@ class Benchmark:
         for line in lines:
             if "llama_print_timings:" in line:
                 label = line.split()[1]
-                values = line.split("=")[1].strip().split()
+                mod_line = re.sub(r"\((\d+)", r"( \1", line)
+                values = mod_line.split("=")[1].strip().split()
                 if label in ["load", "total"]:
                     timings[label] = {"time": float(values[0])}
                 else:
