@@ -58,9 +58,7 @@ if __name__ == "__main__":
                 print(f"Could not load model {model['path']}")
                 continue
 
-            result = llm.multiple_runs(
-                parser.parse_args().prompt, parser.parse_args().runs
-            )
+            result = llm.multiple_runs(parser.parse_args().runs)
 
             del llm
 
