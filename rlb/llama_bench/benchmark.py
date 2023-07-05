@@ -25,6 +25,8 @@ class Benchmark:
             model_path=model, n_gpu_layers=ngl, seed=seed, n_threads=threads
         )
 
+        self.run("warmup", verbose=False)
+
     def __del__(self):
         """Delete model."""
         # This does successfully free the memory. However, llama.cpp does not
@@ -33,7 +35,7 @@ class Benchmark:
         self._llama.__del__()
         gc.collect()
 
-    def run(self, prompt):
+    def run(self, prompt, verbose=True):
         """Run benchmark.
 
         Returns:
@@ -46,9 +48,11 @@ class Benchmark:
 
         stats = err.read()
 
-        print(stats)
-        print(f"Prompt: {prompt}")
-        print(result["choices"][0]["text"])
+        if verbose:
+            print(stats)
+            print(f"Prompt: {prompt}")
+            print(result["choices"][0]["text"])
+
         output["result"] = result
 
         output.update(self.parse_timings(stats))
