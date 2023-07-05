@@ -98,7 +98,11 @@ def create_table(denorm, type):
     """
     table = [["Model", "Params", "Quant", "Fastest", "Slowest", "Mean", "Median"]]
 
-    for result in denorm:
+    denorm_sorted = sorted(
+        denorm, key=lambda d: (d["name"], d["parameters"], d["quant"])
+    )
+
+    for result in denorm_sorted:
         table.append(
             [
                 result["name"],
