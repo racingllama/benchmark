@@ -33,7 +33,6 @@ llama-cpp-python version: {pkg_resources.get_distribution("llama-cpp-python").ve
 CPU Threads: {parser.parse_args().threads}
 GPU Acceleration: {parser.parse_args().gpu}
 Seed: {parser.parse_args().seed}
-Prompt: {parser.parse_args().prompt}
 
 Eval Tokens per second:
 {create_table(denorm, "eval")}
@@ -50,7 +49,6 @@ CPU Threads: {parser.parse_args().threads}
 GPU Acceleration: {parser.parse_args().gpu}
 Model: {os.path.basename(parser.parse_args().model)}
 Seed: {parser.parse_args().seed}
-Prompt: {parser.parse_args().prompt}
 {llama_bench.run_summary(results)}
             """
         )

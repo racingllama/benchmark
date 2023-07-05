@@ -4,6 +4,7 @@ import gc
 import json
 from llama_cpp import Llama
 from wurlitzer import pipes
+from .prompts import prompts
 
 
 class Benchmark:
@@ -46,25 +47,26 @@ class Benchmark:
         stats = err.read()
 
         print(stats)
+        print(f"Prompt: {prompt}")
         print(result["choices"][0]["text"])
         output["result"] = result
 
         output.update(self.parse_timings(stats))
         return output
 
-    def multiple_runs(self, prompt, runs):
+    def multiple_runs(self, runs):
         """Run benchmark multiple times.
 
         Args:
-            prompt (str): Prompt.
             runs (int): Number of runs.
 
         Returns:
             list: Benchmark results.
         """
         results = {}
+        prompt = prompts()
         for run in range(runs):
-            results[run] = self.run(prompt)
+            results[run] = self.run(next(prompt))
 
         return results
 

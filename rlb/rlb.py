@@ -6,16 +6,9 @@ import llama_bench
 import sysinfo
 import output
 
-prompt = "### Human: You are an AI being benchmarked. You want to be helpful \
-and provide a useful response that can be repeated. What would you suggest is \
-the best way to benchmark the response times of a large language model?\n### Assistant:"
-
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-g", "--gpu", action="store_true", default=False, help="Enable GPU acceleration."
-)
-parser.add_argument(
-    "-p", "--prompt", type=str, default=prompt, help="Prompt to use for benchmarking."
 )
 parser.add_argument(
     "-r", "--runs", type=int, default=5, help="Number of runs to perform."
@@ -44,9 +37,7 @@ if __name__ == "__main__":
             seed=parser.parse_args().seed,
             gpu=parser.parse_args().gpu,
         )
-        results = llm.multiple_runs(
-            parser.parse_args().prompt, parser.parse_args().runs
-        )
+        results = llm.multiple_runs(parser.parse_args().runs)
         output.print_results(results, parser, type="model")
 
     elif parser.parse_args().directory:
