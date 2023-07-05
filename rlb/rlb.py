@@ -8,7 +8,7 @@ import output
 
 prompt = "### Human: You are an AI being benchmarked. You want to be helpful \
 and provide a useful response that can be repeated. What would you suggest is \
-the best way to benchmark a large language model?\n### Assistant:"
+the best way to benchmark the response times of a large language model?\n### Assistant:"
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -21,7 +21,7 @@ parser.add_argument(
     "-r", "--runs", type=int, default=5, help="Number of runs to perform."
 )
 parser.add_argument(
-    "-s", "--seed", type=int, default=42, help="Seed to use for benchmarking."
+    "-s", "--seed", type=int, default=-1, help="Seed to use for benchmarking."
 )
 parser.add_argument(
     "-t",
@@ -56,12 +56,17 @@ if __name__ == "__main__":
             print(
                 f"Running benchmark for {model['name']} ({model['quant']} {model['parameters']})"
             )
-            llm = llama_bench.Benchmark(
-                model=model["path"],
-                threads=parser.parse_args().threads,
-                seed=parser.parse_args().seed,
-                gpu=parser.parse_args().gpu,
-            )
+            try:
+                llm = llama_bench.Benchmark(
+                    model=model["path"],
+                    threads=parser.parse_args().threads,
+                    seed=parser.parse_args().seed,
+                    gpu=parser.parse_args().gpu,
+                )
+            except AssertionError:
+                print(f"Could not load model {model['path']}")
+                continue
+
             result = llm.multiple_runs(
                 parser.parse_args().prompt, parser.parse_args().runs
             )
