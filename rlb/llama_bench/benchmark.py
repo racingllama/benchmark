@@ -46,7 +46,7 @@ class Benchmark:
         stats = err.read()
 
         print(stats)
-        print(result["choices"][0][])
+        print(result["choices"][0]["text"])
         output["result"] = result
 
         output.update(self.parse_timings(stats))
