@@ -1,6 +1,7 @@
 """llama.cpp benchmark."""
 
 import gc
+import json
 from llama_cpp import Llama
 from wurlitzer import pipes
 
@@ -35,16 +36,18 @@ class Benchmark:
         """Run benchmark.
 
         Returns:
-            str: Benchmark results.
+            dict: Benchmark results.
         """
         output = {}
         with pipes() as (_, err):
             self._llama.reset()
-            output["output"] = self._llama(prompt, max_tokens=1024)
+            result = self._llama(prompt, max_tokens=1024)
 
         stats = err.read()
 
         print(stats)
+        print(result["choices"][0][])
+        output["result"] = result
 
         output.update(self.parse_timings(stats))
         return output
