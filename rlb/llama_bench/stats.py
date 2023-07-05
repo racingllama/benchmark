@@ -47,13 +47,13 @@ def calculate_stats(results):
         prompt_tokens += (results[run]["prompt"]["tokens_per_sec"],)
 
     output["prompt"] = {}
-    output["prompt"]["fastest"] = min(prompt_tokens)
-    output["prompt"]["slowest"] = max(prompt_tokens)
+    output["prompt"]["fastest"] = max(prompt_tokens)
+    output["prompt"]["slowest"] = min(prompt_tokens)
     output["prompt"]["mean"] = statistics.mean(prompt_tokens)
     output["prompt"]["median"] = statistics.median(prompt_tokens)
     output["eval"] = {}
-    output["eval"]["fastest"] = min(eval_tokens)
-    output["eval"]["slowest"] = max(eval_tokens)
+    output["eval"]["fastest"] = max(eval_tokens)
+    output["eval"]["slowest"] = min(eval_tokens)
     output["eval"]["mean"] = statistics.mean(eval_tokens)
     output["eval"]["median"] = statistics.median(eval_tokens)
 
