@@ -2,7 +2,6 @@
 
 from rlb.output import output
 from unittest.mock import Mock
-import sys
 
 
 def test_denormalize_results():
