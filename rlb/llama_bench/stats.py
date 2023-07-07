@@ -4,13 +4,13 @@ import statistics
 
 
 def run_summary(results):
-    """Parse the results from the benchmark and returns a summary of the results.
+    """Create a summary of the benchmark results.
 
     Args:
         results (dict): The results from the benchmark.
 
     Returns:
-        str: A summary of the results.
+        str: The summary of the benchmark results.
     """
     stats = calculate_stats(results)
 
@@ -25,8 +25,7 @@ Eval Tokens Per Second:
 Fastest: {stats["eval"]["fastest"]:.2f}
 Slowest: {stats["eval"]["slowest"]:.2f}
 Mean:    {stats["eval"]["mean"]:.2f}
-Median:  {stats["eval"]["median"]:.2f}
-    """
+Median:  {stats["eval"]["median"]:.2f}"""
 
 
 def calculate_stats(results):

@@ -2,9 +2,9 @@
 """Racing Llama Benchmark Alpha - a benchmarking application for llama.cpp."""
 
 import argparse
-import llama_bench
-import sysinfo
-import output
+import rlb.llama_bench as llama_bench
+import rlb.sysinfo as sysinfo
+import rlb.output as output
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -14,7 +14,7 @@ parser.add_argument(
     "-r", "--runs", type=int, default=5, help="Number of runs to perform."
 )
 parser.add_argument(
-    "-s", "--seed", type=int, default=-1, help="Seed to use for benchmarking."
+    "-s", "--seed", type=int, default=31337, help="Seed to use for benchmarking."
 )
 parser.add_argument(
     "-t",
@@ -29,7 +29,8 @@ group.add_argument("-m", "--model", type=str, help="Model to use for benchmarkin
 group.add_argument("-d", "--directory", type=str, help="Directory of models to use.")
 
 
-if __name__ == "__main__":
+def run():
+    """Run the benchmark."""
     if parser.parse_args().model:
         llm = llama_bench.Benchmark(
             model=parser.parse_args().model,
@@ -38,7 +39,7 @@ if __name__ == "__main__":
             gpu=parser.parse_args().gpu,
         )
         results = llm.multiple_runs(parser.parse_args().runs)
-        output.print_results(results, parser, type="model")
+        print(output.results(results, parser, type="model"))
 
     elif parser.parse_args().directory:
         results = []
@@ -72,4 +73,8 @@ if __name__ == "__main__":
                     "data": data,
                 }
             )
-        output.print_results(results, parser, type="directory")
+        print(output.results(results, parser, type="directory"))
+
+
+if __name__ == "__main__":
+    run()
