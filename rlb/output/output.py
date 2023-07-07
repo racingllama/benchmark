@@ -1,6 +1,6 @@
 """Output benchmark results."""
 
-import pkg_resources
+from importlib.metadata import version as pkg_version
 import rlb.llama_bench as llama_bench
 import rlb.sysinfo as sysinfo
 import os
@@ -30,7 +30,7 @@ def results(results, parser, type="model"):
     if type == "directory":
         denorm = denormalize(results)
         output += f"""Runs: {parser.parse_args().runs}
-llama-cpp-python version: {pkg_resources.get_distribution("llama-cpp-python").version}
+llama-cpp-python version: {pkg_version("llama-cpp-python")}
 CPU Threads: {parser.parse_args().threads}
 GPU Acceleration: {parser.parse_args().gpu}
 Seed: {parser.parse_args().seed}
@@ -42,7 +42,7 @@ Prompt Tokens per second:
 {create_table(denorm, "prompt")}"""
     else:
         output += f"""Runs: {parser.parse_args().runs}
-llama-cpp-python version: {pkg_resources.get_distribution("llama-cpp-python").version}
+llama-cpp-python version: {pkg_version("llama-cpp-python")}
 CPU Threads: {parser.parse_args().threads}
 GPU Acceleration: {parser.parse_args().gpu}
 Model: {os.path.basename(parser.parse_args().model)}
